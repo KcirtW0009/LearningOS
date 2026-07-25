@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "los"
+version = "0.5.0"
+description = "Learning OS Runtime — a local-first, graph-driven learning runtime"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+
+dependencies = [
+    "pyyaml>=6.0",
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "pydantic>=2.0.0",
+]
+
+[project.scripts]
+los = "los.main:main"
+
+[tool.setuptools.packages.find]
+where = ["."]

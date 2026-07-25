@@ -1,0 +1,98 @@
+{
+  "name": "learningos-desktop",
+  "version": "1.0.0",
+  "description": "LearningOS Desktop Application",
+  "main": "electron/main.js",
+  "scripts": {
+    "electron:dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\" \"electron .\"",
+    "electron:start": "electron .",
+    "electron:build": "npm run build:frontend && electron-builder",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd runtime && python -m uvicorn los.api.server:app --host 127.0.0.1 --port 8000 --reload",
+    "build:frontend": "cd frontend && npm run build",
+    "install:electron": "npm install",
+    "install:frontend": "cd frontend && npm install",
+    "install:all": "npm install && cd frontend && npm install"
+  },
+  "build": {
+    "appId": "com.learningos.desktop",
+    "productName": "LearningOS",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron/main.js",
+      "electron/preload.js",
+      "public/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "runtime/dist/backend.exe",
+        "to": "backend.exe"
+      },
+      {
+        "from": "runtime/dist/libssl-3-x64.dll",
+        "to": "libssl-3-x64.dll"
+      },
+      {
+        "from": "runtime/dist/libcrypto-3-x64.dll",
+        "to": "libcrypto-3-x64.dll"
+      },
+      {
+        "from": "runtime/los/",
+        "to": "runtime/los",
+        "filter": [
+          "**/*",
+          "!__pycache__/**/*",
+          "!*.pyc"
+        ]
+      },
+      {
+        "from": "graphs/",
+        "to": "runtime/graphs",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "frontend/out/",
+        "to": "frontend/out",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "signAndEditExecutable": false
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  },
+  "dependencies": {
+    "electron-updater": "^6.1.8"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "electron": "^28.2.0",
+    "electron-builder": "^24.13.3"
+  },
+  "allowScripts": {
+    "electron@28.3.3": true
+  }
+}

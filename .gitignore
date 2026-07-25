@@ -1,0 +1,67 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+electron/node_modules/
+runtime/__pycache__/
+runtime/los/**/__pycache__/
+runtime/*.pyc
+runtime/los.egg-info/
+
+# Build artifacts
+release/
+dist/
+build/
+frontend/.next/
+frontend/out/
+frontend/.build/
+frontend/tsconfig.tsbuildinfo
+runtime/dist/
+runtime/build/
+runtime/backend.spec
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Data directories
+/data/
+/data/electron-userdata/
+runtime/data/
+
+# Database files
+*.db
+*.sqlite
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+frontend/*.log
+runtime/*.log
+
+# Electron user data
+electron-userdata/
+
+# Test artifacts
+tests/__pycache__/
+.coverage
+htmlcov/
+
+# Generated documentation
+docs/build/
+
+# Temporary files
+*.tmp
+*.temp

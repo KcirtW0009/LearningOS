@@ -1,0 +1,916 @@
+# ═══════════════════════════════════════════════════════════════════════
+#  AI Adventurer Skill Tree — 类《流放之路》星盘设计
+# ═══════════════════════════════════════════════════════════════════════
+#
+#  世界分为 7 个区域（0 基础村 + 6 大陆），不是直线课程，而是技能树。
+#  存在大量交叉依赖 —— Transformer 很早学、Diffusion 不属于 CV 终点、
+#  Agent 是 LLM + Tool Use + Planning + RL 的交汇点。
+#
+#  id 命名: {区域缩写}-{序号}
+#  type:    concept | skill | project | milestone
+#  relation: prerequisite / progression → 阻塞性解锁
+#            association / alternative   → 不阻塞，横向关联
+# ═══════════════════════════════════════════════════════════════════════
+
+nodes:
+  # ═════════════════════════════════════════════════════════════════════
+  #  🏘️ Tier 0 — Foundation Village（新手村）
+  #    获得基础属性：Intelligence / Engineering / Mathematics
+  # ═════════════════════════════════════════════════════════════════════
+  - id: found-01
+    title: "Python 与工程基础"
+    description: >
+      掌握 Python 及数据科学核心工具链：NumPy 数组运算、Pandas 数据处理、
+      Matplotlib 可视化、OpenCV 图像基础。这是你的第一件装备。
+      ── 奖励：Engineering +10 ──
+    type: skill
+    difficulty: beginner
+    resources:
+      - type: url
+        uri: https://numpy.org/doc/stable/
+        label: NumPy 官方文档
+      - type: url
+        uri: https://pandas.pydata.org/docs/
+        label: Pandas 官方文档
+      - type: url
+        uri: https://matplotlib.org/stable/index.html
+        label: Matplotlib 官方文档
+      - type: url
+        uri: https://docs.opencv.org/4.x/
+        label: OpenCV 官方文档
+
+  - id: found-02
+    title: "数学基础"
+    description: >
+      线性代数（矩阵运算、特征值、SVD）、概率论（贝叶斯、分布、采样）、
+      微积分（梯度、链式法则、优化）。这些是理解一切模型的基石。
+      ── 奖励：Intelligence +15 ──
+    type: concept
+    difficulty: beginner
+    resources:
+      - type: url
+        uri: https://www.deeplearningbook.org/
+        label: Deep Learning Book (数学部分)
+      - type: url
+        uri: https://mml-book.github.io/
+        label: Mathematics for Machine Learning
+
+  - id: found-03
+    title: "深度学习入门"
+    description: >
+      MLP 多层感知机 → Backpropagation 反向传播 → SGD 优化器 →
+      PyTorch 框架实战。完成此节点后，世界地图第一次开放：
+      🗝️ Unlock CNN · 🗝️ Unlock Transformer
+    type: concept
+    difficulty: beginner
+    resources:
+      - type: url
+        uri: https://pytorch.org/tutorials/
+        label: PyTorch 官方教程
+      - type: url
+        uri: https://www.deeplearningbook.org/
+        label: Deep Learning Book
+
+  # ═════════════════════════════════════════════════════════════════════
+  #  👁️ Tier 1 — Vision Kingdom（视觉王国）
+  #    职业：Vision Apprentice
+  # ═════════════════════════════════════════════════════════════════════
+  - id: vis-01
+    title: "CNN 经典架构"
+    description: >
+      从 LeNet → AlexNet → VGG → GoogLeNet → ResNet → DenseNet，
+      遍历 CNN 进化史，理解卷积、池化、残差连接的设计演进。
+      ── 奖励：Vision Encoder +1 ──
+    type: concept
+    difficulty: intermediate
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/1512.03385
+        label: ResNet 论文
+      - type: url
+        uri: https://arxiv.org/abs/1608.06993
+        label: DenseNet 论文
+
+  - id: vis-02
+    title: "图像分类"
+    description: >
+      掌握图像分类任务：数据增强、迁移学习、Fine-tuning 预训练模型。
+      在 ImageNet / CIFAR 上实践分类 pipeline。
+    type: skill
+    difficulty: intermediate
+
+  - id: vis-03
+    title: "目标检测"
+    description: >
+      从 Anchor 机制 → NMS 非极大值抑制 → IoU 交并比，到两阶段检测器
+      (Faster RCNN) 与单阶段检测器 (SSD / YOLOv3 → YOLOv5 → YOLOv8)。
+      ── 奖励：Object Perception ──
+    type: skill
+    difficulty: intermediate
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/1506.01497
+        label: Faster R-CNN 论文
+      - type: url
+        uri: https://github.com/ultralytics/ultralytics
+        label: YOLOv8 官方仓库
+
+  - id: vis-04
+    title: "图像分割"
+    description: >
+      FCN 全卷积网络 → U-Net → DeepLab → Mask RCNN。
+      覆盖语义分割与实例分割。推荐挑战：医学图像分割实战。
+      ── 奖励：Pixel Understanding ──
+    type: skill
+    difficulty: intermediate
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/1505.04597
+        label: U-Net 论文
+      - type: url
+        uri: https://arxiv.org/abs/1703.06870
+        label: Mask R-CNN 论文
+
+  - id: vis-05
+    title: "表示学习"
+    description: >
+      自监督视觉表示学习：Contrastive Learning → SimCLR → MoCo →
+      BYOL → MAE 掩码自编码器。Vision Encoder 的终极修炼。
+      ── 奖励：Vision Encoder Lv.2 ──
+    type: concept
+    difficulty: advanced
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/2002.05709
+        label: SimCLR 论文
+      - type: url
+        uri: https://arxiv.org/abs/1911.05722
+        label: MoCo 论文
+      - type: url
+        uri: https://arxiv.org/abs/2111.06377
+        label: MAE 论文
+
+  - id: vis-06
+    title: "视频理解"
+    description: >
+      3D CNN、Two-Stream 网络、TimeSformer 等视频模型。
+      处理时序视觉信息，为后续多模态打基础。
+    type: skill
+    difficulty: advanced
+
+  - id: vis-07
+    title: "3D 视觉"
+    description: >
+      PointNet、NeRF、3D GS、深度估计。从 2D 像素走向 3D 世界理解。
+    type: skill
+    difficulty: advanced
+
+  - id: vis-boss
+    title: "【Boss 战】训练你的 ResNet"
+    description: >
+      从零搭建 ResNet 并在 CIFAR-100 上达到 >75% 准确率。
+      涉及数据加载、模型设计、训练循环、超参调优全流程。
+      ── 成就：Vision Apprentice 转职 ──
+    type: project
+    difficulty: intermediate
+
+  # ═════════════════════════════════════════════════════════════════════
+  #  📖 Tier 2 — Language Kingdom（语言王国）
+  #    另一棵完整的树
+  # ═════════════════════════════════════════════════════════════════════
+  - id: lang-01
+    title: "Tokenizer 与 Embedding"
+    description: >
+      从 BPE / WordPiece / SentencePiece 分词算法，到 Word2Vec / GloVe /
+      上下文 Embedding。将文本转化为模型可理解的数字。
+    type: concept
+    difficulty: beginner
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/1301.3781
+        label: Word2Vec 论文
+
+  - id: lang-02
+    title: "Transformer 架构"
+    description: >
+      Attention 注意力机制 → Multi-Head 多头注意力 → Position Encoding
+      位置编码 → FFN 前馈网络。亲手实现一个 Transformer。
+      ── 奖励：Universal Architecture ──
+    type: concept
+    difficulty: intermediate
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/1706.03762
+        label: Attention Is All You Need
+      - type: url
+        uri: https://jalammar.github.io/illustrated-transformer/
+        label: The Illustrated Transformer
+
+  - id: lang-03
+    title: "BERT 与 Encoder 模型"
+    description: >
+      MLM 掩码语言模型 → NSP → Fine-tuning 微调范式。
+      掌握文本分类、命名实体识别、问答等 NLU 任务。
+      ── 奖励：Language Understanding ──
+    type: skill
+    difficulty: intermediate
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/1810.04805
+        label: BERT 论文
+      - type: url
+        uri: https://huggingface.co/docs/transformers
+        label: HuggingFace Transformers
+
+  - id: lang-04
+    title: "GPT 与 Decoder 模型"
+    description: >
+      Causal LM 因果语言模型 → KV Cache → RoPE 旋转位置编码 →
+      RMSNorm → MoE 混合专家。深入理解生成式语言模型的核心技术。
+      ── 奖励：Language Generation ──
+    type: skill
+    difficulty: intermediate
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/2005.14165
+        label: GPT-3 论文
+      - type: url
+        uri: https://arxiv.org/abs/2104.09864
+        label: RoPE 论文
+
+  - id: lang-05
+    title: "LLM 训练与扩展"
+    description: >
+      预训练数据管道 → 分布式训练 (FSDP/DeepSpeed) → 指令微调 →
+      RLHF 对齐。理解从基座模型到 Chat 模型的完整管线。
+    type: concept
+    difficulty: advanced
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/2203.15556
+        label: Chinchilla Scaling Laws
+      - type: url
+        uri: https://arxiv.org/abs/2302.13971
+        label: LLaMA 论文
+
+  - id: lang-boss-1
+    title: "【Boss 战】从零实现 Transformer"
+    description: >
+      用 PyTorch 纯手写 Transformer，包括 Multi-Head Attention、FFN、
+      LayerNorm、Position Encoding，在小型翻译任务上验证。
+      ── 成就：Architecture Master ──
+    type: project
+    difficulty: intermediate
+
+  - id: lang-boss-2
+    title: "【Boss 战】训练 MiniGPT"
+    description: >
+      使用 nanoGPT 或类似代码库，在 Shakespeare / WikiText 上训练一个
+      小型 GPT 模型，理解数据预处理、训练循环、生成采样的全部细节。
+      ── 成就：LLM Initiate ──
+    type: project
+    difficulty: advanced
+
+  # ═════════════════════════════════════════════════════════════════════
+  #  ✨ Tier 3 — Generative Magic（生成魔法大陆）
+  #    生成模型独立于 CV，是一个独立世界
+  # ═════════════════════════════════════════════════════════════════════
+  - id: gen-01
+    title: "GAN 生成对抗网络"
+    description: >
+      理解 Generator vs Discriminator 的博弈框架。DCGAN → WGAN →
+      StyleGAN。覆盖无条件生成与条件生成。
+    type: concept
+    difficulty: intermediate
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/1406.2661
+        label: GAN 原始论文
+      - type: url
+        uri: https://arxiv.org/abs/1812.04948
+        label: StyleGAN 论文
+
+  - id: gen-02
+    title: "VAE 变分自编码器"
+    description: >
+      理解变分推断与 latent space。从 AE → VAE → VQ-VAE 的演化路径。
+    type: concept
+    difficulty: intermediate
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/1312.6114
+        label: VAE 论文
+
+  - id: gen-03
+    title: "Diffusion 扩散模型"
+    description: >
+      DDPM 去噪扩散 → DDIM 加速采样 → Latent Diffusion / Stable Diffusion
+      → ControlNet → IP-Adapter → Flux → SDXL。
+      ── 奖励：Image Generation ──
+    type: concept
+    difficulty: advanced
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/2006.11239
+        label: DDPM 论文
+      - type: url
+        uri: https://arxiv.org/abs/2112.10752
+        label: Latent Diffusion / SD 论文
+      - type: url
+        uri: https://arxiv.org/abs/2302.05543
+        label: ControlNet 论文
+
+  - id: gen-04
+    title: "Flow Matching 与连续归一化流"
+    description: >
+      Normalizing Flow → Continuous Normalizing Flow →
+      Flow Matching → Rectified Flow。生成模型的前沿方向。
+    type: concept
+    difficulty: advanced
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/2210.02747
+        label: Flow Matching 论文
+
+  - id: gen-boss
+    title: "【Boss 战】训练 LoRA"
+    description: >
+      在 Stable Diffusion 基础上训练一个风格 LoRA，收集数据集、
+      配置训练参数、验证生成效果。完成后拥有自己的 AI 画风。
+      ── 成就：Image Generation Unlocked ──
+    type: project
+    difficulty: advanced
+
+  # ═════════════════════════════════════════════════════════════════════
+  #  🌐 Tier 4 — Multimodal Empire（多模态帝国）
+  #    Vision + Language 在此融合
+  #    职业进阶：Vision Mage → Multimodal Mage → AI Wizard
+  # ═════════════════════════════════════════════════════════════════════
+  - id: mm-01
+    title: "CLIP 与视觉-语言对齐"
+    description: >
+      对比学习 + Image Encoder + Text Encoder + Temperature 温度参数。
+      理解图文联合嵌入空间的构建。
+      ── 奖励：Vision Language Alignment ──
+    type: concept
+    difficulty: intermediate
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/2103.00020
+        label: CLIP 论文
+
+  - id: mm-02
+    title: "BLIP2 与 Q-Former"
+    description: >
+      轻量级 Querying Transformer 桥接冻结的视觉编码器与语言模型。
+      理解高效多模态对齐方案。
+    type: skill
+    difficulty: intermediate
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/2301.12597
+        label: BLIP-2 论文
+
+  - id: mm-03
+    title: "LLaVA 与视觉指令微调"
+    description: >
+      Vision Encoder → Projection → Instruction Tuning → Conversation。
+      构建能看图对话的多模态助手。
+      ── 奖励：Visual Assistant ──
+    type: skill
+    difficulty: advanced
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/2304.08485
+        label: LLaVA 论文
+      - type: url
+        uri: https://github.com/haotian-liu/LLaVA
+        label: LLaVA 官方仓库
+
+  - id: mm-04
+    title: "高级 VLM"
+    description: >
+      Qwen-VL → InternVL → GPT-4V 风格模型。高分辨率输入、动态分块、
+      多图理解、OCR 能力。探索前沿多模态模型的架构设计。
+    type: concept
+    difficulty: advanced
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/2308.12966
+        label: Qwen-VL 论文
+
+  - id: mm-05
+    title: "多模态生成"
+    description: >
+      从文本生成图像/视频/3D/音频。DALL-E → Stable Diffusion →
+      Sora → 统一多模态生成框架。生成与理解的终极融合。
+    type: concept
+    difficulty: advanced
+
+  - id: mm-boss
+    title: "【Boss 战】搭建图文问答助手"
+    description: >
+      基于 LLaVA 或类似架构，微调一个能回答图片问题的多模态模型。
+      涵盖数据处理、训练配置、对话评估的完整 pipeline。
+      ── 成就：Multimodal Mage 转职成功 ──
+    type: project
+    difficulty: advanced
+
+  # ═════════════════════════════════════════════════════════════════════
+  #  🤖 Tier 5 — AI Agent Guild（AI 特工公会）
+  #    当前最热门领域，LLM + Planning + Memory + Tool Use 交汇
+  # ═════════════════════════════════════════════════════════════════════
+  - id: agent-01
+    title: "LLM 作为推理引擎"
+    description: >
+      Chain-of-Thought 思维链 → Self-Consistency → Tree-of-Thought →
+      ReAct 模式。不训练模型，而是激发模型的推理潜能。
+    type: concept
+    difficulty: intermediate
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/2201.11903
+        label: Chain-of-Thought 论文
+      - type: url
+        uri: https://arxiv.org/abs/2210.03629
+        label: ReAct 论文
+
+  - id: agent-02
+    title: "任务规划与分解"
+    description: >
+      Task Decomposition 任务分解 → Plan-and-Execute →
+      动态重规划 → 分层规划。从单步推理走向多步自主决策。
+    type: concept
+    difficulty: intermediate
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/2305.04091
+        label: Plan-and-Solve 论文
+
+  - id: agent-03
+    title: "记忆系统"
+    description: >
+      Short-term Memory → Long-term Memory → Vector DB 向量存储 →
+      Reflection 反思机制。让 Agent 拥有持续学习和经验积累能力。
+    type: concept
+    difficulty: intermediate
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/2304.03442
+        label: Generative Agents 论文
+
+  - id: agent-04
+    title: "工具调用"
+    description: >
+      Function Calling → Browser 浏览器自动化 → Python REPL →
+      外部 API 集成。打通 LLM 与现实世界的交互接口。
+    type: skill
+    difficulty: advanced
+    resources:
+      - type: url
+        uri: https://platform.openai.com/docs/guides/function-calling
+        label: OpenAI Function Calling
+
+  - id: agent-05
+    title: "RAG 与 MCP 协议"
+    description: >
+      检索增强生成 → 文档分块 → Embedding → 向量检索 → 上下文注入。
+      MCP (Model Context Protocol) 标准化工具连接。
+    type: skill
+    difficulty: advanced
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/2005.11401
+        label: RAG 原始论文
+      - type: url
+        uri: https://modelcontextprotocol.io/
+        label: MCP 官方文档
+
+  - id: agent-06
+    title: "自主 Agent 构建"
+    description: >
+      整合 Planning + Memory + Reflection + Tool Calling → 构建完整
+      Autonomous Agent。AutoGPT / CrewAI / LangGraph 框架实战。
+      ── 奖励：AI Engineer ──
+    type: project
+    difficulty: advanced
+    resources:
+      - type: url
+        uri: https://github.com/langchain-ai/langgraph
+        label: LangGraph
+      - type: url
+        uri: https://github.com/joaomdmoura/crewAI
+        label: CrewAI
+
+  - id: agent-07
+    title: "多 Agent 与群体智能"
+    description: >
+      Multi-Agent Communication → 角色分工 → 协商 Negotiation →
+      Task Allocation → Debate → Swarm Intelligence 涌现行为。
+      ── 奖励：Swarm Intelligence ──
+    type: concept
+    difficulty: advanced
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/2308.00352
+        label: Multi-Agent Debate 论文
+      - type: url
+        uri: https://arxiv.org/abs/2308.10848
+        label: AutoGen 论文
+
+  - id: agent-boss
+    title: "【Boss 战】构建 Autonomous Agent"
+    description: >
+      设计并实现一个能自主完成复杂任务的 Agent：给定目标 → 制定计划 →
+      调用工具 → 反思调整 → 达成目标。项目可自选方向（代码助手、
+      研究助手、自动化运维等）。
+      ── 成就：AI Engineer 称号解锁 ──
+    type: project
+    difficulty: advanced
+
+  # ═════════════════════════════════════════════════════════════════════
+  #  🦾 Tier 6 — Embodied World（具身智能世界）
+  #    最终大陆：Vision + Language + Planning + Robot
+  # ═════════════════════════════════════════════════════════════════════
+  - id: emb-01
+    title: "机器人感知"
+    description: >
+      多传感器融合 → 深度估计 → 物体检测与位姿估计 → 场景理解。
+      Vision 在物理世界的落地。
+    type: concept
+    difficulty: intermediate
+
+  - id: emb-02
+    title: "导航与路径规划"
+    description: >
+      SLAM → A* / RRT → 动态避障 → 语义导航。
+      让机器人在空间中自主移动。
+    type: skill
+    difficulty: advanced
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/1712.03906
+        label: Habitat 仿真平台
+
+  - id: emb-03
+    title: "操控与运动控制"
+    description: >
+      运动学 → 阻抗控制 → 抓取规划 → 灵巧操作。
+      物理交互的工程实践。
+    type: skill
+    difficulty: advanced
+
+  - id: emb-04
+    title: "强化学习"
+    description: >
+      MDP → Policy Gradient → PPO → SAC → Offline RL。
+      从游戏 AI 到机器人控制的通用决策框架。
+      注：RL 是连接 Agent 和 Embodied 的关键桥梁。
+    type: concept
+    difficulty: advanced
+    resources:
+      - type: url
+        uri: https://spinningup.openai.com/
+        label: Spinning Up in RL
+      - type: url
+        uri: https://arxiv.org/abs/1707.06347
+        label: PPO 论文
+
+  - id: emb-05
+    title: "VLA 视觉-语言-动作模型"
+    description: >
+      RT-1 → RT-2 → OpenVLA → π₀ (Pi0) → GR00T。
+      将视觉理解 + 语言指令 + 动作生成统一为一个端到端模型。
+    type: concept
+    difficulty: advanced
+    resources:
+      - type: url
+        uri: https://arxiv.org/abs/2307.15818
+        label: RT-2 论文
+      - type: url
+        uri: https://arxiv.org/abs/2406.09246
+        label: OpenVLA 论文
+
+  - id: emb-06
+    title: "Sim2Real 迁移"
+    description: >
+      Domain Randomization → 域自适应 → 系统辨识 → 从仿真到真实
+      机器人的零样本/少样本迁移技术。
+    type: skill
+    difficulty: advanced
+    resources:
+      - type: url
+        uri: https://developer.nvidia.com/isaac-sim
+        label: NVIDIA Isaac Sim
+
+  - id: emb-boss
+    title: "【最终 Boss】帮我拿一个苹果"
+    description: >
+      在仿真环境中完成完整 pick-and-place 任务：感知苹果位置 → 
+      规划路径 → 控制机械臂抓取 → 移动到目标位置放下。
+      ── 成就：True Embodied Intelligence ──
+    type: project
+    difficulty: advanced
+
+
+edges:
+  # ═════════════════════════════════════════════════════════════════════
+  #  🏘️ Foundation Village 内部
+  # ═════════════════════════════════════════════════════════════════════
+  - from: found-01
+    to: found-03
+    relation: progression
+
+  - from: found-02
+    to: found-03
+    relation: progression
+
+  # ═════════════════════════════════════════════════════════════════════
+  #  Foundation → Vision Kingdom
+  # ═════════════════════════════════════════════════════════════════════
+  - from: found-03
+    to: vis-01
+    relation: prerequisite
+
+  - from: found-03
+    to: vis-02
+    relation: progression
+
+  - from: vis-01
+    to: vis-02
+    relation: progression
+
+  - from: vis-01
+    to: vis-03
+    relation: progression
+
+  - from: vis-01
+    to: vis-04
+    relation: progression
+
+  - from: vis-02
+    to: vis-05
+    relation: progression
+
+  - from: vis-03
+    to: vis-05
+    relation: progression
+
+  - from: vis-04
+    to: vis-05
+    relation: progression
+
+  - from: vis-05
+    to: vis-06
+    relation: progression
+
+  - from: vis-05
+    to: vis-07
+    relation: progression
+
+  - from: vis-02
+    to: vis-boss
+    relation: prerequisite
+
+  - from: vis-01
+    to: vis-boss
+    relation: prerequisite
+
+  # ═════════════════════════════════════════════════════════════════════
+  #  Foundation → Language Kingdom
+  # ═════════════════════════════════════════════════════════════════════
+  - from: found-03
+    to: lang-02
+    relation: prerequisite
+
+  - from: lang-01
+    to: lang-02
+    relation: progression
+
+  - from: lang-02
+    to: lang-03
+    relation: progression
+
+  - from: lang-02
+    to: lang-04
+    relation: progression
+
+  - from: lang-03
+    to: lang-05
+    relation: progression
+
+  - from: lang-04
+    to: lang-05
+    relation: progression
+
+  - from: lang-02
+    to: lang-boss-1
+    relation: prerequisite
+
+  - from: lang-04
+    to: lang-boss-2
+    relation: prerequisite
+
+  # ── Language 内部横向关联（不阻塞） ──
+  - from: lang-03
+    to: lang-04
+    relation: association
+
+  # ═════════════════════════════════════════════════════════════════════
+  #  Foundation → Generative Magic
+  # ═════════════════════════════════════════════════════════════════════
+  - from: found-03
+    to: gen-01
+    relation: prerequisite
+
+  - from: found-03
+    to: gen-02
+    relation: prerequisite
+
+  - from: gen-02
+    to: gen-03
+    relation: progression
+
+  - from: gen-02
+    to: gen-04
+    relation: progression
+
+  - from: gen-03
+    to: gen-04
+    relation: association
+
+  - from: gen-03
+    to: gen-boss
+    relation: prerequisite
+
+  # ── 交叉路径（不阻塞） ──
+  - from: gen-01
+    to: gen-03
+    relation: association
+
+  - from: vis-01
+    to: gen-01
+    relation: association
+
+  - from: vis-05
+    to: gen-03
+    relation: association
+
+  # ═════════════════════════════════════════════════════════════════════
+  #  Vision + Language → Multimodal Empire（核心融合）
+  # ═════════════════════════════════════════════════════════════════════
+  - from: vis-05
+    to: mm-01
+    relation: prerequisite
+
+  - from: lang-03
+    to: mm-01
+    relation: prerequisite
+
+  - from: mm-01
+    to: mm-02
+    relation: progression
+
+  - from: mm-02
+    to: mm-03
+    relation: progression
+
+  - from: mm-03
+    to: mm-04
+    relation: progression
+
+  - from: mm-04
+    to: mm-05
+    relation: progression
+
+  - from: mm-03
+    to: mm-boss
+    relation: prerequisite
+
+  # ── 交叉关联（不阻塞） ──
+  - from: lang-04
+    to: mm-03
+    relation: association
+
+  - from: gen-03
+    to: mm-05
+    relation: association
+
+  # ═════════════════════════════════════════════════════════════════════
+  #  Language + Multimodal → Agent Guild
+  # ═════════════════════════════════════════════════════════════════════
+  - from: lang-04
+    to: agent-01
+    relation: prerequisite
+
+  - from: agent-01
+    to: agent-02
+    relation: progression
+
+  - from: agent-02
+    to: agent-03
+    relation: progression
+
+  - from: agent-03
+    to: agent-04
+    relation: progression
+
+  - from: agent-04
+    to: agent-05
+    relation: progression
+
+  - from: agent-04
+    to: agent-06
+    relation: prerequisite
+
+  - from: agent-05
+    to: agent-06
+    relation: prerequisite
+
+  - from: agent-03
+    to: agent-06
+    relation: prerequisite
+
+  - from: agent-06
+    to: agent-07
+    relation: progression
+
+  - from: agent-06
+    to: agent-boss
+    relation: prerequisite
+
+  # ── 交叉关联 ──
+  - from: mm-03
+    to: agent-04
+    relation: association
+
+  # ═════════════════════════════════════════════════════════════════════
+  #  Vision + Agent + RL → Embodied World（最终融合）
+  # ═════════════════════════════════════════════════════════════════════
+  - from: vis-05
+    to: emb-01
+    relation: prerequisite
+
+  - from: emb-01
+    to: emb-02
+    relation: progression
+
+  - from: emb-02
+    to: emb-03
+    relation: progression
+
+  - from: found-03
+    to: emb-04
+    relation: prerequisite
+
+  - from: emb-03
+    to: emb-05
+    relation: progression
+
+  - from: emb-04
+    to: emb-05
+    relation: prerequisite
+
+  - from: emb-05
+    to: emb-06
+    relation: progression
+
+  - from: emb-05
+    to: emb-boss
+    relation: prerequisite
+
+  # ── 交叉关联（Embodied 是多领域交汇点） ──
+  - from: agent-02
+    to: emb-02
+    relation: association
+
+  - from: agent-06
+    to: emb-05
+    relation: association
+
+  - from: mm-03
+    to: emb-01
+    relation: association
+
+  - from: lang-04
+    to: emb-05
+    relation: association
+
+  - from: vis-03
+    to: emb-01
+    relation: association
+
+  # ═════════════════════════════════════════════════════════════════════
+  #  跨大陆长程关联（不阻塞，体现交叉依赖本质）
+  # ═════════════════════════════════════════════════════════════════════
+  - from: agent-07
+    to: emb-05
+    relation: association
+
+  - from: gen-03
+    to: mm-01
+    relation: association
+
+  - from: lang-05
+    to: agent-06
+    relation: association

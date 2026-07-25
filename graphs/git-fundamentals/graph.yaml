@@ -1,0 +1,250 @@
+# ── Graph 写作规范 ──────────────────────────────────────────
+#
+# id 命名:    {领域缩写}-{序号}  例: git-01
+#             全小写，连字符分隔，全局唯一
+#
+# type:       concept | skill | project | milestone
+#             concept   → 理论知识
+#             skill     → 动手操作的技能
+#             project   → 需要综合运用的项目
+#             milestone → 阶段性里程碑
+#
+# difficulty: beginner | intermediate | advanced
+#
+# relation:   prerequisite → 前置：必须先完成 source 才能解锁 target
+#             dependency   → 依赖：与 prerequisite 等价
+#             progression  → 顺序推荐：建议按序学习，但不强制
+#             association  → 关联：横向相关的知识点，不影响解锁
+#             alternative  → 替代：不同的学习路径，不影响解锁
+#
+# 【解锁规则】只有 prerequisite / dependency / progression 会锁定节点。
+#            association 和 alternative 不阻塞学习。
+# ────────────────────────────────────────────────────────────
+
+nodes:
+  # ═══ 第一章：入门 ═══
+  - id: git-01
+    title: 什么是版本控制
+    description: >
+      理解版本控制的核心概念：为什么需要它，它能解决什么问题。
+      对比手动保存副本和使用版本控制工具的区别。
+    type: concept
+    difficulty: beginner
+    resources:
+      - type: url
+        uri: https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%85%B3%E4%BA%8E%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6
+        label: Pro Git 第1章
+
+  - id: git-02
+    title: 安装 Git
+    description: >
+      在 Windows / macOS / Linux 上安装 Git，配置用户名和邮箱。
+      运行 git --version 验证安装成功。
+    type: skill
+    difficulty: beginner
+    resources:
+      - type: url
+        uri: https://git-scm.com/downloads
+        label: Git 官方下载
+      - type: url
+        uri: https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%AE%89%E8%A3%85-Git
+        label: Pro Git 安装指南
+
+  - id: git-03
+    title: 创建第一个仓库
+    description: >
+      使用 git init 初始化本地仓库，理解 .git 目录的作用。
+      练习 git status 查看仓库状态。
+    type: skill
+    difficulty: beginner
+
+  # ═══ 第二章：基本工作流 ═══
+  - id: git-04
+    title: 暂存与提交
+    description: >
+      理解工作区、暂存区、仓库三个区域。使用 git add 将文件加入暂存区，
+      用 git commit 创建一次提交。编写清晰的 commit message。
+    type: skill
+    difficulty: beginner
+    resources:
+      - type: url
+        uri: https://git-scm.com/book/zh/v2/Git-%E5%9F%BA%E7%A1%80-%E8%AE%B0%E5%BD%95%E6%AF%8F%E6%AC%A1%E6%9B%B4%E6%96%B0%E5%88%B0%E4%BB%93%E5%BA%93
+        label: Pro Git 记录变更
+
+  - id: git-05
+    title: 查看提交历史
+    description: >
+      使用 git log 浏览提交历史，理解 commit hash、作者、时间戳。
+      练习 git log --oneline / --graph / --stat 等常用选项。
+    type: skill
+    difficulty: beginner
+
+  - id: git-06
+    title: Git 的三种状态
+    description: >
+      深入理解 modified、staged、committed 三种状态。用 git diff 和
+      git diff --staged 对比不同状态下的文件变化。
+    type: concept
+    difficulty: intermediate
+
+  # ═══ 第三章：分支操作 ═══
+  - id: git-07
+    title: 理解分支
+    description: >
+      理解分支是什么：一个指向提交的可移动指针。
+      理解为什么分支是 Git 的核心优势——轻量、高效、鼓励实验。
+    type: concept
+    difficulty: intermediate
+
+  - id: git-08
+    title: 创建和切换分支
+    description: >
+      使用 git branch 创建分支，git switch 或 git checkout 切换分支。
+      练习创建 feature 分支并在分支上提交。
+    type: skill
+    difficulty: intermediate
+    resources:
+      - type: url
+        uri: https://git-scm.com/book/zh/v2/Git-%E5%88%86%E6%94%AF-%E5%88%86%E6%94%AF%E7%AE%80%E4%BB%8B
+        label: Pro Git 分支简介
+
+  - id: git-09
+    title: 合并分支
+    description: >
+      使用 git merge 将分支合并回主分支。
+      理解 fast-forward 和 three-way merge 的区别。
+    type: skill
+    difficulty: intermediate
+
+  - id: git-10
+    title: 解决合并冲突
+    description: >
+      在故意制造冲突的场景下练习解决合并冲突。
+      理解冲突标记（<<<<< ===== >>>>>）的含义。
+    type: skill
+    difficulty: advanced
+
+  # ═══ 第四章：远程协作 ═══
+  - id: git-11
+    title: 远程仓库概念
+    description: >
+      理解远程仓库与本地仓库的关系。GitHub/GitLab 等托管平台的角色。
+      区分 origin、upstream 等远程别名。
+    type: concept
+    difficulty: beginner
+
+  - id: git-12
+    title: 克隆与推送
+    description: >
+      用 git clone 复制远程仓库到本地。
+      用 git push 将本地提交推送到远程。配置 SSH 密钥或 token。
+    type: skill
+    difficulty: intermediate
+    resources:
+      - type: url
+        uri: https://git-scm.com/book/zh/v2/Git-%E5%9F%BA%E7%A1%80-%E6%89%93%E6%A0%87%E7%AD%BE
+        label: Pro Git 打标签
+      - type: url
+        uri: https://docs.github.com/zh/get-started/getting-started-with-git/setting-your-username-in-git
+        label: GitHub 官方文档
+
+  - id: git-13
+    title: 拉取与变基
+    description: >
+      使用 git pull 拉取远程更新。理解 git fetch vs git pull 的区别。
+      学习 git rebase 和 merge 的差异，选择合适的整合策略。
+    type: skill
+    difficulty: advanced
+
+  # ═══ 第五章：综合 ═══
+  - id: git-14
+    title: 常用撤销操作
+    description: >
+      掌握 git restore、git reset、git revert 的区别和使用场景。
+      理解 --soft、--mixed、--hard 三种 reset 模式。
+    type: skill
+    difficulty: advanced
+
+  - id: git-15
+    title: Git 实战：协作项目
+    description: >
+      模拟真实团队协作：fork 仓库 → 创建功能分支 → 提交 → 发起 PR → 
+      处理 review 反馈 → 合并到主分支。体验完整的开源贡献流程。
+    type: project
+    difficulty: advanced
+
+
+edges:
+  # ── 第一章 内部依赖 ──
+  - from: git-01
+    to: git-02
+    relation: progression
+
+  - from: git-01
+    to: git-03
+    relation: progression
+
+  # ── 从入门到基本工作流 ──
+  - from: git-03
+    to: git-04
+    relation: prerequisite
+
+  - from: git-04
+    to: git-05
+    relation: progression
+
+  - from: git-04
+    to: git-06
+    relation: progression
+
+  # ── 从基本到分支 ──
+  - from: git-06
+    to: git-07
+    relation: prerequisite
+
+  - from: git-07
+    to: git-08
+    relation: prerequisite
+
+  - from: git-08
+    to: git-09
+    relation: prerequisite
+
+  - from: git-09
+    to: git-10
+    relation: progression
+
+  # ── 分支操作之间的关联（不阻塞） ──
+  - from: git-05
+    to: git-07
+    relation: association
+
+  # ── 远程协作 ──
+  - from: git-02
+    to: git-11
+    relation: progression
+
+  - from: git-11
+    to: git-12
+    relation: prerequisite
+
+  - from: git-12
+    to: git-13
+    relation: prerequisite
+
+  # ── 高级与综合 ──
+  - from: git-10
+    to: git-14
+    relation: association
+
+  - from: git-13
+    to: git-14
+    relation: progression
+
+  - from: git-10
+    to: git-15
+    relation: prerequisite
+
+  - from: git-13
+    to: git-15
+    relation: prerequisite

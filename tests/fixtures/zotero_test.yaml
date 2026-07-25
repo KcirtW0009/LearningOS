@@ -1,0 +1,116 @@
+package_id: learn-zotero
+name: 学习使用 Zotero
+version: 1.0.0
+author: test-user
+
+nodes:
+  - id: install-zotero
+    title: 安装 Zotero 客户端
+    description: 下载并安装 Zotero 桌面应用和浏览器连接器插件。
+    type: skill
+    difficulty: beginner
+
+  - id: create-library
+    title: 创建个人文献库
+    description: 了解 Zotero Library 结构，创建第一个合集(Collection)。
+    type: concept
+    difficulty: beginner
+
+  - id: import-pdfs
+    title: 导入 PDF 文献
+    description: 将本地 PDF 文件拖拽到 Zotero，自动提取元数据并识别 DOI。
+    type: skill
+    difficulty: beginner
+
+  - id: organize-tags
+    title: 使用标签和合集组织
+    description: 为文献添加 Tags 分类到 Collections，建立知识结构。
+    type: skill
+    difficulty: intermediate
+
+  - id: cite-insert
+    title: Word / Google Docs 插入引用
+    description: 在 Word 或 Google Docs 中通过 Zotero 插件一键插入格式化引用。
+    type: skill
+    difficulty: intermediate
+
+  - id: citation-styles
+    title: 选择引用格式 (APA / Chicago / GB-T 7714)
+    description: 切换不同的参考文献样式，理解 CSL 格式文件的作用。
+    type: concept
+    difficulty: intermediate
+
+  - id: sync-account
+    title: 注册账号并开启同步
+    description: 创建 Zotero 账号，配置文献元数据与附件的 WebDAV 同步。
+    type: skill
+    difficulty: intermediate
+
+  - id: attach-pdfs
+    title: 管理附件与链接 PDF
+    description: 理解已存储文件 vs 链接文件的区别，配置附件存储路径。
+    type: concept
+    difficulty: advanced
+
+  - id: sync-collaboration
+    title: 协作共享群组库
+    description: 创建或加入 Group Library，与团队成员共享文献合集。
+    type: project
+    difficulty: advanced
+
+edges:
+  - from: install-zotero
+    to: create-library
+    relation: prerequisite
+
+  - from: create-library
+    to: import-pdfs
+    relation: prerequisite
+
+  - from: import-pdfs
+    to: organize-tags
+    relation: progression
+
+  - from: organize-tags
+    to: cite-insert
+    relation: prerequisite
+
+  - from: cite-insert
+    to: citation-styles
+    relation: dependency
+
+  - from: organize-tags
+    to: citation-styles
+    relation: association
+
+  - from: create-library
+    to: sync-account
+    relation: progression
+
+  - from: import-pdfs
+    to: attach-pdfs
+    relation: dependency
+
+  - from: attach-pdfs
+    to: sync-collaboration
+    relation: dependency
+
+  - from: sync-account
+    to: sync-collaboration
+    relation: prerequisite
+
+  - from: attach-pdfs
+    to: sync-account
+    relation: association
+
+  - from: citation-styles
+    to: sync-collaboration
+    relation: alternative
+
+  - from: cite-insert
+    to: attach-pdfs
+    relation: progression
+
+  - from: import-pdfs
+    to: sync-account
+    relation: alternative

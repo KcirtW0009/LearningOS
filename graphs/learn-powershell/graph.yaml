@@ -1,0 +1,107 @@
+nodes:
+- id: what-is-powershell
+  title: PowerShell 简介与环境搭建
+  description: 了解 PowerShell 是什么、与 CMD 的区别，安装 PowerShell 7，熟悉控制台和 ISE/VSCode 编辑器。
+  type: concept
+  difficulty: beginner
+- id: basic-commands
+  title: 基本命令与 Cmdlet 使用
+  description: 掌握 Get-Command、Get-Help、Get-Member 等核心 cmdlet，学习命令命名规范（动词-名词）。
+  type: skill
+  difficulty: beginner
+- id: pipeline-basics
+  title: 管道基础
+  description: 理解管道（|）的工作机制，学会使用 Where-Object、Select-Object、Sort-Object 筛选和处理对象。
+  type: skill
+  difficulty: beginner
+- id: filesystem-navigation
+  title: 文件系统与注册表操作
+  description: 使用 Get-ChildItem、Set-Location、Copy-Item、Get-Content 等管理文件和注册表项。
+  type: skill
+  difficulty: beginner
+- id: variables-data-types
+  title: 变量与数据类型
+  description: 学习变量定义、基本数据类型（string, int, array, hashtable）以及类型转换。
+  type: concept
+  difficulty: intermediate
+- id: scripting-basics
+  title: 脚本编写基础
+  description: 创建 .ps1 脚本，使用条件判断（if/switch）和循环（foreach, for, while），添加注释。
+  type: skill
+  difficulty: intermediate
+- id: functions-modules
+  title: 函数与模块
+  description: 定义高级函数，参数处理（param）、管道输入绑定，并创建和导入自定义模块。
+  type: skill
+  difficulty: intermediate
+- id: error-handling
+  title: 错误处理与调试
+  description: 使用 Try/Catch/Finally、$Error 变量，设置断点进行调试，处理终止性和非终止性错误。
+  type: skill
+  difficulty: intermediate
+- id: remote-management
+  title: 远程管理
+  description: 学习 Invoke-Command、Enter-PSSession、WinRM 配置，实现远程计算机管理和脚本执行。
+  type: skill
+  difficulty: advanced
+- id: advanced-oop
+  title: 面向对象与 .NET 集成
+  description: 深入理解 PowerShell 的对象模型，直接调用 .NET 类，使用 Add-Type 编写 C# 代码片段。
+  type: concept
+  difficulty: advanced
+- id: automation-project
+  title: 自动化运维实战项目
+  description: 综合运用所学，编写一个完整的自动化脚本（如系统巡检、批量文件处理、AD 用户管理），并计划任务定时运行。
+  type: project
+  difficulty: advanced
+- id: dsc
+  title: 期望状态配置（DSC）
+  description: 了解 PowerShell DSC 原理，编写配置 MOF，实现基础设施即代码。
+  type: milestone
+  difficulty: advanced
+edges:
+- from: what-is-powershell
+  to: basic-commands
+  relation: prerequisite
+- from: what-is-powershell
+  to: filesystem-navigation
+  relation: prerequisite
+- from: basic-commands
+  to: pipeline-basics
+  relation: progression
+- from: pipeline-basics
+  to: variables-data-types
+  relation: prerequisite
+- from: variables-data-types
+  to: scripting-basics
+  relation: prerequisite
+- from: scripting-basics
+  to: functions-modules
+  relation: progression
+- from: scripting-basics
+  to: error-handling
+  relation: association
+- from: functions-modules
+  to: advanced-oop
+  relation: progression
+- from: error-handling
+  to: remote-management
+  relation: prerequisite
+- from: remote-management
+  to: automation-project
+  relation: prerequisite
+- from: functions-modules
+  to: automation-project
+  relation: dependency
+- from: advanced-oop
+  to: dsc
+  relation: association
+- from: automation-project
+  to: dsc
+  relation: alternative
+- from: what-is-powershell
+  to: remote-management
+  relation: prerequisite
+- from: filesystem-navigation
+  to: scripting-basics
+  relation: association
