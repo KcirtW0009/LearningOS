@@ -288,7 +288,8 @@ export default function Home() {
   const [selectedNode, setSelectedNode] = useState<NodeDetail | null>(null);
   const [status, setStatus] = useState<any>(null);
   const [xp, setXp] = useState<any>(null);
-  const [previousLevel, setPreviousLevel] = useState(1);
+  const prevLevelRef = useRef(1);
+  const levelLoadedRef = useRef(false);
   const [achievements, setAchievements] = useState<{
     earned: Achievement[];
     locked: Achievement[];
@@ -355,10 +356,11 @@ export default function Home() {
       setStatus(st);
       setXp(xpData);
       const newLevel = xpData.global_level ?? xpData.level ?? 1;
-      if (newLevel > previousLevel) {
+      if (levelLoadedRef.current && newLevel > prevLevelRef.current) {
         addToast(`🎉 恭喜升级！当前等级: Lv.${newLevel}`, "success");
       }
-      setPreviousLevel(newLevel);
+      prevLevelRef.current = newLevel;
+      levelLoadedRef.current = true;
       setAchievements(ach);
       setRecommendations(recs.recommendations || []);
       // Fetch undo stack and edges
@@ -377,6 +379,7 @@ export default function Home() {
 
   const loadGraph = useCallback(async (graphId: string) => {
     setLoading(true);
+    levelLoadedRef.current = false;
     try {
       const pkg = graphPackages.find((g) => g.id === graphId) || graphPackages[0];
       await api("/graph/load", {
@@ -720,7 +723,10 @@ export default function Home() {
 
         try {
           const seen = await hasSeenOnboarding();
-          if (!seen) setShowOnboarding(true);
+          if (!seen) {
+            markOnboardingSeen().catch(() => {});
+            setShowOnboarding(true);
+          }
         } catch { /* ignore */ }
       };
 
@@ -871,7 +877,6 @@ export default function Home() {
         <Onboarding
           onComplete={() => {
             setShowOnboarding(false);
-            markOnboardingSeen().catch(() => {});
           }}
         />
       )}

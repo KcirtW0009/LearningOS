@@ -237,6 +237,6 @@ export async function clearAllLocalData(): Promise<void> {
   
   // 3. Clear localStorage entries
   try {
-    localStorage.removeItem("los-onboarding-completed");
+    localStorage.removeItem("learningos-onboarding-seen");
   } catch { /* ignore */ }
 }

@@ -147,12 +147,30 @@ export async function getCachedGraphEdges(graphId: string): Promise<any[] | null
 }
 
 // ── Onboarding State ───────────────────────────────────────────────────
+// Uses both IndexedDB and localStorage for robustness across sessions.
+// localStorage is synchronous and survives abrupt app termination.
+
+const ONBOARDING_KEY = "onboarding-completed";
+const ONBOARDING_LS_KEY = "learningos-onboarding-seen";
 
 export async function hasSeenOnboarding(): Promise<boolean> {
-  const val = await cacheGet("onboarding-completed");
-  return val === true;
+  // Fast synchronous check via localStorage first
+  if (typeof localStorage !== "undefined" && localStorage.getItem(ONBOARDING_LS_KEY) === "1") {
+    return true;
+  }
+  // Fallback to IndexedDB
+  const val = await cacheGet(ONBOARDING_KEY);
+  if (val === true) {
+    // Sync to localStorage for future fast access
+    try { localStorage.setItem(ONBOARDING_LS_KEY, "1"); } catch { /* ignore */ }
+    return true;
+  }
+  return false;
 }
 
 export async function markOnboardingSeen(): Promise<void> {
-  await cacheSet("onboarding-completed", true, 0);
+  // Write to localStorage first (synchronous, reliable)
+  try { localStorage.setItem(ONBOARDING_LS_KEY, "1"); } catch { /* ignore */ }
+  // Also write to IndexedDB
+  await cacheSet(ONBOARDING_KEY, true, 0);
 }

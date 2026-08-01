@@ -12,42 +12,85 @@
 - 🏆 **成就系统**: 约 20 个成就，展示学习成果
 - 📈 **熟练度系统**: 5 级熟练度（完成/熟悉/掌握/熟练/精通），影响 XP 加成
 - ↩️ **撤销功能**: 支持无限步撤回，包含级联撤销
-- 🌐 **多语言**: 中英文切换支持
-- 📱 **桌面应用**: 支持 Windows/macOS 桌面客户端 (Electron)
-- 🔄 **自动更新**: Electron 应用自动更新支持
+- 📱 **桌面应用**: 支持 Windows 桌面客户端 (Electron)
+- 🔄 **待实现功能**: 上传附件，图片形式分享进度......
 
 ## 🛠️ 技术架构
 
-- **前端**: Next.js + React + TypeScript + TailwindCSS
-- **后端**: FastAPI + Python
-- **桌面**: Electron
+- **前端**: Next.js 14 + React 18 + TypeScript + TailwindCSS
+- **后端**: FastAPI + Python 3.10+
+- **桌面**: Electron 28
 
 ## 🚀 快速开始
 
-### 开发模式
+### 环境要求
+
+| 依赖 | 最低版本 | 说明 |
+|------|---------|------|
+| Python | 3.10+ | 后端运行时 |
+| Node.js | 18+ | 前端与 Electron |
+| npm | 9+ | 包管理 |
+| OS | Windows 10+ | 桌面客户端支持 |
+
+### 安装依赖
 
 ```bash
-# 安装依赖
+# 一键安装所有依赖（前端 + Electron）
 npm run install:all
 
-# 启动后端 (终端1)
+# 仅安装前端依赖
+cd frontend && npm install
+
+# 仅安装 Electron 依赖
+npm install
+```
+
+### 启动开发模式
+
+#### 方式一：前后端独立启动
+
+```bash
+# 终端 1 — 启动后端 API (端口 8000)
 cd runtime
 python -m uvicorn los.api.server:app --host 127.0.0.1 --port 8000 --reload
 
-# 启动前端 (终端2)
+# 终端 2 — 启动前端 (端口 3000)
 cd frontend
 npm run dev
-
-# 访问
-# 前端: http://localhost:3000
-# API文档: http://localhost:8000/docs
 ```
 
-### Electron 开发模式
+访问地址：
+- 前端界面: <http://localhost:3000>
+- API 文档: <http://localhost:8000/docs>
+
+#### 方式二：Electron 桌面模式
 
 ```bash
+# 一键启动后端 + 前端 + Electron 窗口
 npm run electron:dev
 ```
+
+### 入口文件
+
+| 模块 | 入口文件 | 说明 |
+|------|---------|------|
+| 后端 API | `runtime/los/api/server.py` | FastAPI 服务，端口 8000 |
+| 前端页面 | `frontend/src/app/page.tsx` | 主界面（Next.js App Router） |
+| 技能树组件 | `frontend/src/components/SkillTree.tsx` | 图谱可视化与交互 |
+| 学习记录 | `frontend/src/components/LearningRecord.tsx` | 学习热力图与活动时间线 |
+| Electron 主进程 | `electron/main.js` | 窗口管理、预加载、打包 |
+| Electron 预加载 | `electron/preload.js` | 暴露 `window.electronAPI` |
+| CLI 工具 | `runtime/los/cli/main.py` | 命令行接口 (`los` 命令) |
+| XP 引擎 | `runtime/los/engine/xp.py` | 经验值与等级计算 |
+| 成就系统 | `runtime/los/engine/achievements.py` | 成就判定逻辑 |
+
+### 界面预览
+
+> 正常加载后，你应该看到以下界面：
+>
+> ![登录界面截图](./screenshots/landing.png)
+> ![主界面截图](./screenshots/main1.png)
+>(./screenshots/main2.png)
 
 ## 📁 项目结构
 
@@ -58,23 +101,27 @@ LearningOS/
 │   │   ├── app/        # 页面 (page.tsx, globals.css)
 │   │   ├── components/ # 组件 (SkillTree, Onboarding, LearningRecord)
 │   │   └── lib/        # 工具函数 (i18n, cache)
-│   ├── public/         # 静态资源
+│   ├── public/         # 静态资源 (sw.js)
 │   └── next.config.js  # Next.js 配置
 ├── runtime/            # Python 后端
 │   ├── los/
 │   │   ├── api/        # API 接口 (server.py)
-│   │   ├── engine/     # 引擎逻辑 (xp.py, resolver.py, recommender.py, achievements.py)
+│   │   ├── engine/     # 引擎逻辑 (xp.py, resolver.py, achievements.py)
 │   │   ├── graph/      # 图模型 (models.py, loader.py, validator.py)
-│   │   ├── runtime/    # 运行时实例 (runtime_instance.py, runtime_manifest.py)
+│   │   ├── runtime/    # 运行时实例 (runtime_instance.py)
 │   │   ├── state/      # 状态管理 (models.py, engine.py)
 │   │   └── storage/    # 存储适配 (adapter.py)
-│   └── data/           # 用户数据
+│   └── requirements.txt
 ├── electron/           # Electron 桌面应用
 │   ├── main.js         # 主进程
 │   └── preload.js      # 预加载脚本
 ├── graphs/             # 知识图谱包
+│   ├── ai-adventurer/
+│   ├── git-fundamentals/
+│   └── learn-powershell/
 ├── tests/              # 测试用例
-└── spec/               # 规格文档
+├── spec/               # 规格文档
+└── docs/               # 技术文档
 ```
 
 ## 🎮 核心概念
@@ -141,6 +188,20 @@ pyinstaller -F --name backend --add-data "los;los" --add-data "graphs;graphs" --
 ```bash
 npm run electron:build
 ```
+
+## ⚠️ 已知限制
+
+### 成就悬浮提示遮挡
+成就图标 hover 时的悬浮提示框可能被状态栏或面板边界遮挡。当前使用 `z-50` 层级，但在部分布局下仍需调整定位逻辑。
+
+### 图谱路径硬编码
+`UserState` 中存储了 `graph_path` 字段（见 TD-001），这是 MVP 阶段的快捷实现。当前图谱路径与用户状态耦合，跨机器迁移时可能需要手动修正路径。
+
+### 多标签页限制
+当前后端为单实例设计，多标签页同时操作可能导致状态竞态条件。建议单标签页使用。
+
+### Electron 端口冲突
+打包后的桌面应用默认使用 8000 端口启动后端，若该端口被占用会自动切换，但切换逻辑可能需要用户手动确认。
 
 ## 📜 许可证
 
