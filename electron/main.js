@@ -104,6 +104,7 @@ async function createSplashWindow() {
         .status{font-size:13px;opacity:.9}
         .progress-bar{width:200px;height:4px;background:rgba(255,255,255,.2);border-radius:2px;overflow:hidden;margin-top:16px}
         .progress-fill{height:100%;background:white;border-radius:2px;width:0%;transition:width .3s}
+        .version{font-size:11px;opacity:.5;margin-top:24px}
       </style>
     </head>
     <body>
@@ -111,6 +112,7 @@ async function createSplashWindow() {
       <div class="loader"></div>
       <div class="status" id="status">正在启动后端服务...</div>
       <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+      <div class="version">v${app.getVersion()}</div>
     </body></html>`;
 
   splashWindow.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(splashHtml)}`);
@@ -208,7 +210,7 @@ async function createWindow() {
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js'),
     },
-    title: 'LearningOS',
+    title: `LearningOS v${app.getVersion()}`,
     autoHideMenuBar: true,
     show: false,
   });
@@ -359,6 +361,8 @@ app.on('activate', () => {
 // ── IPC ───────────────────────────────────────────────────────────────
 
 ipcMain.handle('get-api-url', () => `http://127.0.0.1:${backendPort}`);
+
+ipcMain.handle('get-version', () => app.getVersion());
 
 ipcMain.handle('check-for-updates', () => {
   if (isDev) return { available: false, message: '开发模式下禁用更新检查' };

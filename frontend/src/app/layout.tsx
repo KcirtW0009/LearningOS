@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "LearningOS",
+  title: `LearningOS v${process.env.APP_VERSION || '0.0.0'}`,
   description: "Graph-driven learning runtime",
 };
 
