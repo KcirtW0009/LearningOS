@@ -111,7 +111,7 @@ npm run electron:dev
 >
 > ![登录界面截图](./screenshots/landing.png)
 > ![主界面截图](./screenshots/main1.png)
->(./screenshots/main2.png)
+> ![主界面截图](./screenshots/main2.png)
 
 ## 📁 项目结构
 
