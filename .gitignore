@@ -1,67 +1,243 @@
-# Dependencies
+# ============================================
+# LearningOS .gitignore
+# ============================================
+
+# --------------------------------------------
+# PowerPoint & Presentation Files
+# --------------------------------------------
+*.ppt
+*.pptx
+*.pptm
+*.pptxm
+*.pot
+*.potx
+*.potm
+*.pps
+*.ppsx
+*.ppsm
+*.key
+learningos-presentation.html
+
+# --------------------------------------------
+# Python Virtual Environments
+# --------------------------------------------
+venv/
+env/
+.venv/
+.env/
+env.bak/
+venv.bak/
+
+# --------------------------------------------
+# Python Bytecode & Compiled Files
+# --------------------------------------------
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pyd
+*.so
+*.egg-info/
+*.egg
+dist/
+*.egg-info
+runtime/*.egg-info/
+
+# --------------------------------------------
+# Python Tooling
+# --------------------------------------------
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+.pyre/
+.hypothesis/
+
+# --------------------------------------------
+# Node.js / JavaScript
+# --------------------------------------------
 node_modules/
 frontend/node_modules/
 electron/node_modules/
-runtime/__pycache__/
-runtime/los/**/__pycache__/
-runtime/*.pyc
-runtime/los.egg-info/
+runtime/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Build artifacts
+# --------------------------------------------
+# Build Artifacts
+# --------------------------------------------
 release/
 dist/
 build/
+out/
+.next/
+.cache/
+.parcel-cache/
+*.tsbuildinfo
+.DS_Store.store
+electron-builder/
+
+# Frontend specific
 frontend/.next/
 frontend/out/
 frontend/.build/
+frontend/.cache/
 frontend/tsconfig.tsbuildinfo
+
+# Runtime specific
 runtime/dist/
 runtime/build/
 runtime/backend.spec
+runtime/los.egg-info/
 
-# Environment files
+# --------------------------------------------
+# Environment Variables & Secrets
+# --------------------------------------------
 .env
 .env.local
+.env.*.local
 .env.development.local
 .env.test.local
 .env.production.local
+.env.development
+.env.test
+.env.production
+.env.staging
+*.env
+secrets.json
+secrets.yaml
+credentials.json
 
-# Data directories
+# --------------------------------------------
+# Data & User Files
+# --------------------------------------------
 /data/
 /data/electron-userdata/
 runtime/data/
-
-# Database files
+user-data/
+electron-userdata/
 *.db
 *.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
 
-# IDE files
-.vscode/
+# --------------------------------------------
+# IDE & Editor Files
+# --------------------------------------------
 .idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.sublime-*
+.vscode/settings.json
+.project
+.classpath
+.c9/
+.vs/
 *.swp
 *.swo
 *~
+.history/
+.trae/
 
-# OS files
+# --------------------------------------------
+# OS-Specific Files
+# --------------------------------------------
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
 
-# Log files
+# --------------------------------------------
+# Logs
+# --------------------------------------------
 *.log
+*.log.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 frontend/*.log
 runtime/*.log
 
-# Electron user data
-electron-userdata/
-
-# Test artifacts
-tests/__pycache__/
+# --------------------------------------------
+# Test Artifacts & Coverage
+# --------------------------------------------
 .coverage
+.coverage.*
+coverage.xml
+*.lcov
 htmlcov/
+.nyc_output/
+.tox/
+.nox/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
-# Generated documentation
+# --------------------------------------------
+# Generated Documentation
+# --------------------------------------------
 docs/build/
+docs/_build/
+docs/html/
 
-# Temporary files
+# --------------------------------------------
+# Temporary & Backup Files
+# --------------------------------------------
 *.tmp
 *.temp
+*.bak
+*.backup
+*.orig
+*.save
+*.rej
+*.patch
+*.crdownload
+*.partial
+
+# --------------------------------------------
+# Model & Large Binary Files
+# --------------------------------------------
+*.safetensors
+*.onnx
+*.pth
+*.pt
+*.h5
+*.keras
+*.bin
+*.whl
+*.tar.gz
+*.zip
+*.7z
+
+# --------------------------------------------
+# Electron Specific
+# --------------------------------------------
+electron/out/
+electron/dist/
+release/
+*.asar
+
+# --------------------------------------------
+# Misc
+# --------------------------------------------
+.vscode-test/
+.fleet/
+.jetbrains/
+.gradle/
+.maven/
+.npm/

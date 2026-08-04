@@ -23,7 +23,28 @@
 
 ## 🚀 快速开始
 
-### 环境要求
+你可以选择以下任一方式运行 LearningOS：
+
+---
+
+### 📦 方式一：直接使用（普通用户推荐）
+
+**无需安装 Python 或 Node.js 环境！**
+
+我们提供了已打包好的 Windows 桌面应用，开箱即用：
+
+1. **下载安装包**：前往 [GitHub Releases](https://github.com/KcirtW0009/LearningOS/releases) 下载最新版本（v1.0.2）
+2. **解压运行**：解压 `LearningOS-win-unpacked.zip`，双击 `LearningOS.exe` 即可启动
+
+> 💡 应用内置了后端服务，首次启动可能需要几秒钟初始化。
+
+---
+
+### 🛠️ 方式二：源码运行（开发者适用）
+
+如果你希望进行二次开发或调试源码，请按以下步骤操作：
+
+#### 环境要求
 
 | 依赖 | 最低版本 | 说明 |
 |------|---------|------|
@@ -32,7 +53,7 @@
 | npm | 9+ | 包管理 |
 | OS | Windows 10+ | 桌面客户端支持 |
 
-### 安装依赖
+#### 安装依赖
 
 ```bash
 # 一键安装所有依赖（前端 + Electron）
@@ -41,13 +62,13 @@ npm run install:all
 # 仅安装前端依赖
 cd frontend && npm install
 
-# 仅安装 Electron 依赖
-npm install
+# 仅安装 Python 依赖
+pip install -r requirements.txt
 ```
 
-### 启动开发模式
+#### 启动开发模式
 
-#### 方式一：前后端独立启动
+**方式 A：前后端独立启动**
 
 ```bash
 # 终端 1 — 启动后端 API (端口 8000)
@@ -63,7 +84,7 @@ npm run dev
 - 前端界面: <http://localhost:3000>
 - API 文档: <http://localhost:8000/docs>
 
-#### 方式二：Electron 桌面模式
+**方式 B：Electron 桌面模式**
 
 ```bash
 # 一键启动后端 + 前端 + Electron 窗口
@@ -216,6 +237,10 @@ npm run electron:build
 
 ### Electron 端口冲突
 打包后的桌面应用默认使用 8000 端口启动后端，若该端口被占用会自动切换，但切换逻辑可能需要用户手动确认。
+
+### 切换图谱后界面未及时更新
+切换到新图谱后，主界面可能不会立即更新，导致旧图谱的节点仍显示在界面上，无法正常操作。
+- **解决方案**：重新点击新图谱中的任意节点，即可覆盖旧节点界面，恢复正常操作。
 
 ## 📜 许可证
 

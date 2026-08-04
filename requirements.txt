@@ -1,6 +1,6 @@
 # ============================================
-# LearningOS Runtime Python Dependencies
-# Install with: pip install -r runtime/requirements.txt
+# LearningOS Python Dependencies
+# Install with: pip install -r requirements.txt
 # ============================================
 
 # --- Core Runtime Dependencies ---
@@ -9,5 +9,5 @@ uvicorn>=0.30.0          # ASGI server
 pydantic>=2.8.0          # Data validation (api/server.py)
 pyyaml>=6.0              # YAML parsing (graph/loader.py, cli/main.py, runtime_instance.py)
 
-# --- Test Dependencies ---
+# --- Test Dependencies (required for running tests) ---
 pytest>=8.0.0            # Test framework (tests/)
