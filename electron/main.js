@@ -1,5 +1,5 @@
 const { app, BrowserWindow, ipcMain, shell, dialog } = require('electron');
-const { spawn } = require('child_process');
+const { spawn, execSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 const http = require('http');
@@ -245,6 +245,16 @@ async function createWindow() {
     mainWindow.show();
   });
 
+  // Ensure app quit when main window is closed (triggers cleanup via before-quit)
+  mainWindow.on('closed', () => {
+    mainWindow = null;
+    if (!quitRequested) {
+      quitRequested = true;
+      console.log('[Electron] Main window closed, quitting app...');
+      app.quit();
+    }
+  });
+
   // Fallback timeout
   setTimeout(() => {
     if (splashWindow && !splashWindow.isDestroyed()) {
@@ -313,21 +323,116 @@ function showErrorDialog(title, message, detail) {
 
 // ── Cleanup ───────────────────────────────────────────────────────────
 
-function cleanup() {
-  if (backendProcess) {
-    try {
-      if (process.platform === 'win32') {
-        spawn('taskkill', ['/F', '/T', '/PID', String(backendProcess.pid)]);
-      } else {
-        try { process.kill(-backendProcess.pid); } catch { backendProcess.kill(); }
+let shuttingDown = false;
+let quitRequested = false;
+
+// ── Process kill helpers ──────────────────────────────────────────────
+
+function killByPidTree(pid) {
+  if (process.platform !== 'win32') {
+    try { process.kill(-pid, 'SIGKILL'); } catch { /* ignore */ }
+    return;
+  }
+  try {
+    execSync(`taskkill /F /T /PID ${pid}`, { timeout: 3000, stdio: 'pipe' });
+    console.log('[Electron] taskkill /T succeeded for pid=' + pid);
+  } catch (e) {
+    console.log('[Electron] taskkill /T result:', (e.message || '').trim());
+  }
+}
+
+function killByName(name) {
+  if (process.platform !== 'win32') return;
+  try {
+    execSync(`taskkill /F /IM ${name}`, { timeout: 3000, stdio: 'pipe' });
+    console.log('[Electron] taskkill /IM succeeded for ' + name);
+  } catch (e) {
+    // Expected: no process found is fine
+  }
+}
+
+function killByPort(port) {
+  if (process.platform !== 'win32') return;
+  try {
+    const output = execSync(`netstat -ano | findstr :${port}`, { encoding: 'utf8', timeout: 3000 });
+    const lines = output.split('\n');
+    for (const line of lines) {
+      const parts = line.trim().split(/\s+/);
+      const pid = parseInt(parts[parts.length - 1]);
+      if (pid && !isNaN(pid) && pid !== 0) {
+        console.log('[Electron] Found process on port ' + port + ': PID=' + pid);
+        try {
+          execSync(`taskkill /F /PID ${pid}`, { timeout: 3000, stdio: 'pipe' });
+          console.log('[Electron] Killed PID=' + pid);
+        } catch (e) {
+          console.log('[Electron] Kill result for PID=' + pid + ':', (e.message || '').trim());
+        }
       }
-    } catch { try { backendProcess.kill(); } catch {} }
+    }
+  } catch (e) {
+    // No process on port — that's fine
+  }
+}
+
+// ── Cleanup ───────────────────────────────────────────────────────────
+
+async function cleanup() {
+  if (shuttingDown) return;
+  shuttingDown = true;
+  console.log('[Electron] Cleanup started');
+
+  // Safety net: force-exit after 8 seconds no matter what
+  setTimeout(() => {
+    console.log('[Electron] Cleanup timeout, force-exiting');
+    process.exit(0);
+  }, 8000);
+
+  // 1. Kill backend process
+  if (backendProcess) {
+    const pid = backendProcess.pid;
+    console.log('[Electron] Killing backend (pid=' + pid + ')');
+
+    // Try graceful signal first (works on macOS/Linux)
+    try { backendProcess.kill('SIGTERM'); } catch { /* Windows: SIGTERM may throw */ }
+
+    // Wait up to 2 seconds for graceful exit
+    let exited = false;
+    try {
+      exited = await new Promise(resolve => {
+        const timeout = setTimeout(() => resolve(false), 2000);
+        backendProcess.once('exit', () => {
+          clearTimeout(timeout);
+          resolve(true);
+        });
+      });
+    } catch { /* ignore */ }
+
+    if (!exited) {
+      // Layer 1: kill by PID with process tree
+      console.log('[Electron] Force-killing backend by PID tree...');
+      killByPidTree(pid);
+
+      // Layer 2: kill by process name (catches orphaned children)
+      console.log('[Electron] Force-killing backend by name...');
+      killByName('backend.exe');
+    }
     backendProcess = null;
   }
+
+  // 2. Safety net: kill anything still listening on the backend port
+  console.log('[Electron] Sweeping processes on port ' + backendPort);
+  killByPort(backendPort);
+
+  // 3. Close frontend HTTP server
   if (frontendServer) {
-    frontendServer.close();
+    try {
+      await new Promise(resolve => frontendServer.close(() => resolve()));
+      console.log('[Electron] Frontend server closed');
+    } catch { /* ignore */ }
     frontendServer = null;
   }
+
+  console.log('[Electron] Cleanup done');
 }
 
 // ── App lifecycle ─────────────────────────────────────────────────────
@@ -353,7 +458,21 @@ app.whenReady().then(async () => {
   }
 });
 
-app.on('window-all-closed', () => { cleanup(); app.quit(); });
+// before-quit: reliable cleanup on ANY exit path (close window, app.quit(), system shutdown)
+app.on('before-quit', (e) => {
+  if (!shuttingDown) {
+    e.preventDefault();
+    cleanup().finally(() => app.exit(0));
+  }
+});
+
+// On macOS, hide to dock instead of quitting
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin' && !quitRequested) {
+    quitRequested = true;
+    app.quit();
+  }
+});
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
