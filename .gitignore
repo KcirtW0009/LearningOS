@@ -3,20 +3,9 @@
 # ============================================
 
 # --------------------------------------------
-# PowerPoint & Presentation Files
+# Presentation Files (PPT, slides, generator)
 # --------------------------------------------
-*.ppt
-*.pptx
-*.pptm
-*.pptxm
-*.pot
-*.potx
-*.potm
-*.pps
-*.ppsx
-*.ppsm
-*.key
-learningos-presentation.html
+/presentation/
 
 # --------------------------------------------
 # Python Virtual Environments
